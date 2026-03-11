@@ -28,22 +28,22 @@ def detect_backend():
         r = requests.get(f"{config.OLLAMA_URL}/api/tags", timeout=3)
         if r.status_code == 200:
             models = [m['name'] for m in r.json().get('models', [])]
-            print(f"[NovaMind] ✅ Ollama détecté. Modèles disponibles: {models}")
+            print(f"[NovaMind] [OK] Ollama detecte. Modeles disponibles: {models}")
             if models:
                 # Choisit le modèle configuré ou le premier disponible
                 preferred = config.OLLAMA_MODEL
                 chosen = preferred if any(preferred in m for m in models) else models[0]
                 config.OLLAMA_MODEL = chosen
-                print(f"[NovaMind] 🧠 Modèle sélectionné: {chosen}")
+                print(f"[NovaMind] [IA] Modele selectionne: {chosen}")
             _backend_mode = 'ollama'
             return
     except Exception as e:
-        print(f"[NovaMind] ⚠️  Ollama non disponible: {e}")
+        print(f"[NovaMind] [WARN] Ollama non disponible: {e}")
 
     # 2. Test Transformers
     try:
         from transformers import pipeline
-        print(f"[NovaMind] 🔄 Chargement du modèle HuggingFace: {config.HF_MODEL} ...")
+        print(f"[NovaMind] [LOAD] Chargement du modele HuggingFace: {config.HF_MODEL} ...")
         _hf_pipeline = pipeline(
             "text-generation",
             model=config.HF_MODEL,
@@ -51,15 +51,15 @@ def detect_backend():
             temperature=config.DEFAULT_TEMPERATURE,
         )
         _backend_mode = 'transformers'
-        print("[NovaMind] ✅ Transformers chargé avec succès.")
+        print("[NovaMind] [OK] Transformers charge avec succes.")
         return
     except Exception as e:
-        print(f"[NovaMind] ⚠️  Transformers non disponible: {e}")
+        print(f"[NovaMind] [WARN] Transformers non disponible: {e}")
 
     # 3. Fallback intelligent
     _backend_mode = 'smart_fallback'
-    print("[NovaMind] 💡 Mode réponses intelligentes activé (aucun modèle local détecté).")
-    print("[NovaMind]    → Installez Ollama sur https://ollama.com pour activer l'IA réelle.")
+    print("[NovaMind] [INFO] Mode reponses intelligentes active (aucun modele local detecte).")
+    print("[NovaMind]    -> Installez Ollama sur https://ollama.com pour activer l'IA reelle.")
 
 
 def detect_search_intent(message: str) -> bool:
@@ -147,9 +147,9 @@ def _generate_ollama(message: str, history: list, system_prompt: str, temperatur
         return data.get("message", {}).get("content", "Désolé, je n'ai pas pu générer de réponse.")
 
     except requests.exceptions.Timeout:
-        return "⏱️ Le modèle met trop de temps à répondre. Essayez avec un modèle plus léger dans `config.py`."
+        return "[TIME] Le modele met trop de temps a repondre. Essayez avec un modele plus leger dans `config.py`."
     except Exception as e:
-        return f"❌ Erreur Ollama : {str(e)}"
+        return f"[ERR] Erreur Ollama : {str(e)}"
 
 
 # ─── TRANSFORMERS ─────────────────────────────────────

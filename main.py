@@ -163,7 +163,7 @@ def update_status():
 
 if __name__ == '__main__':
     print("=" * 52)
-    print(f"   🧠  NovaMind v{config.VERSION} — Serveur IA Local")
+    print(f"   [IA]  NovaMind v{config.VERSION} -- Serveur IA Local")
     print("=" * 52)
 
     # Vérification des mises à jour sur GitHub
@@ -174,10 +174,10 @@ if __name__ == '__main__':
 
     status = ai_engine.get_status()
     print(f"\n[NovaMind] Backend actif : {status['backend'].upper()}")
-    print(f"[NovaMind] Modèle        : {status['model']}")
-    print(f"\n[NovaMind] 🚀 Serveur démarré sur http://localhost:{config.PORT}")
-    print("[NovaMind] Ouvrez http://localhost:8765 et allez dans Paramètres ⚙️")
-    print("           → Sélectionnez 'Flask local' pour connecter l'IA\n")
+    print(f"[NovaMind] Modele        : {status['model']}")
+    print(f"\n[NovaMind] Launch: Serveur demarre sur http://localhost:{config.PORT}")
+    print("[NovaMind] Ouvrez http://localhost:8765 et allez dans Parametres")
+    print("           -> Selectionnez 'Flask local' pour connecter l'IA\n")
 
     app.run(
         host='0.0.0.0',

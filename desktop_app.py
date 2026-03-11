@@ -40,7 +40,7 @@ def wait_for_server(url, timeout=30):
 
 if __name__ == '__main__':
     print("=" * 52)
-    print(f"   🧠  NovaMind v{config.VERSION} — Application Native")
+    print(f"   [IA]  NovaMind v{config.VERSION} -- Application Native")
     print("=" * 52)
 
     # 0. Vérifier les mises à jour avant tout
