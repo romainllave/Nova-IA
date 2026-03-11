@@ -4,7 +4,8 @@
 
 # Nom du modèle Ollama à utiliser (ex: mistral, llama3.2, phi3, tinyllama)
 OLLAMA_MODEL = "mistral"
-VERSION = "1.0.1"
+# Version
+VERSION = "1.0.2"
 
 # URL du serveur Ollama (par défaut local)
 OLLAMA_URL = "http://localhost:11434"
