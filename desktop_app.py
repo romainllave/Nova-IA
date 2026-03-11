@@ -7,6 +7,7 @@
 
 import threading
 import time
+import requests
 import webview
 from main import app
 import ai_engine
@@ -19,25 +20,45 @@ def start_flask_server():
     # On désactive le reloader pour éviter les erreurs de duplication de port avec pywebview
     app.run(host='127.0.0.1', port=config.PORT, debug=False, use_reloader=False)
 
+def wait_for_server(url, timeout=30):
+    """Attend que le serveur Flask réponde sur l'URL spécifiée."""
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        try:
+            response = requests.get(f"{url}/health", timeout=2)
+            if response.status_code == 200:
+                print(f"[NovaMind Desktop] Serveur prêt ! ({round(time.time() - start_time, 1)}s)")
+                return True
+        except requests.exceptions.RequestException:
+            pass
+        
+        print("[NovaMind Desktop] Attente du moteur IA...")
+        time.sleep(0.5)
+    
+    return False
+
 if __name__ == '__main__':
     # 1. Lancer Flask dans un thread séparé
     server_thread = threading.Thread(target=start_flask_server)
     server_thread.daemon = True
     server_thread.start()
     
-    # Attendre que Flask soit prêt
-    time.sleep(1.5)
+    # 2. Attendre que Flask soit réellement prêt
+    server_url = f'http://127.0.0.1:{config.PORT}'
+    if not wait_for_server(server_url):
+        print("[NovaMind Desktop] ERREUR : Le serveur n'a pas pu démarrer à temps.")
+        # On peut quand même tenter de lancer, mais l'erreur sera visible dans la fenêtre
     
-    # 2. Créer la fenêtre de l'application native
+    # 3. Créer la fenêtre de l'application native
     print("[NovaMind Desktop] Lancement de l'interface graphique...")
     window = webview.create_window(
         'NovaMind — IA Personnelle', 
-        f'http://127.0.0.1:{config.PORT}',
+        server_url,
         width=1200, 
         height=850,
         min_size=(900, 600),
         background_color='#070710'
     )
     
-    # 3. Démarrer la boucle d'événements UI (bloquant)
+    # 4. Démarrer la boucle d'événements UI (bloquant)
     webview.start()

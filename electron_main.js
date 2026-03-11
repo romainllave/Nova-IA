@@ -6,7 +6,7 @@ const http = require('http');
 let mainWindow;
 let flaskProcess;
 const PORT = 5000;
-const MAX_RETRIES = 30;
+const MAX_RETRIES = 120; // Allow up to 60 seconds (120 * 500ms)
 
 function createWindow() {
   mainWindow = new BrowserWindow({
