@@ -12,6 +12,7 @@ import webview
 from main import app
 import ai_engine
 import config
+import updater
 
 def start_flask_server():
     """Démarre le serveur Flask en arrière-plan."""
@@ -38,6 +39,13 @@ def wait_for_server(url, timeout=30):
     return False
 
 if __name__ == '__main__':
+    print("=" * 52)
+    print(f"   🧠  NovaMind v{config.VERSION} — Application Native")
+    print("=" * 52)
+
+    # 0. Vérifier les mises à jour avant tout
+    updater.check_and_update()
+
     # 1. Lancer Flask dans un thread séparé
     server_thread = threading.Thread(target=start_flask_server)
     server_thread.daemon = True

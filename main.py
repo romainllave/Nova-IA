@@ -10,6 +10,7 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import ai_engine
 import config
+import updater
 import time
 import os
 import sys
@@ -151,8 +152,11 @@ def set_model():
 
 if __name__ == '__main__':
     print("=" * 52)
-    print("   🧠  NovaMind — Serveur IA Local")
+    print(f"   🧠  NovaMind v{config.VERSION} — Serveur IA Local")
     print("=" * 52)
+
+    # Vérification des mises à jour sur GitHub
+    updater.check_and_update()
 
     # Détection et initialisation du moteur IA
     ai_engine.detect_backend()
