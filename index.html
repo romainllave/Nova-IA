@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NovaMind — IA Personnelle</title>
+  <meta name="description" content="NovaMind, votre intelligence artificielle locale"/>
+  <meta name="theme-color" content="#070710"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="NovaMind"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- Ambient background -->
+<div class="bg-canvas">
+  <div class="bg-orb orb-a"></div>
+  <div class="bg-orb orb-b"></div>
+  <div class="bg-orb orb-c"></div>
+  <canvas id="particleCanvas"></canvas>
+</div>
+
+<!-- ══════════════════════════════════
+     APP SHELL
+══════════════════════════════════ -->
+<div class="app-shell">
+
+  <!-- ── TOP BAR ── -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M10 16 Q16 6 22 16 Q16 26 10 16Z" fill="url(#bl)"/><circle cx="16" cy="16" r="3" fill="white" opacity="0.9"/>
+            <defs><linearGradient id="bl" x1="0" y1="0" x2="32" y2="32"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#38bdf8"/></linearGradient></defs>
+          </svg>
+        </div>
+        <span class="brand-name">NovaMind</span>
+      </div>
+    </div>
+
+    <div class="topbar-center">
+      <div class="ai-status-bar" id="aiStatusBar">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Prêt</span>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <button class="icon-btn" id="voiceMuteBtn" title="Désactiver/Activer la voix">
+        <svg id="voiceIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="themeBtn" title="Thème">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="settingsBtn" title="Paramètres">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── MAIN CONTENT ── -->
+  <div class="main-content">
+
+    <!-- ── BRAIN PANEL (LEFT of chat) ── -->
+    <section class="brain-panel" id="brainPanel">
+      <div class="brain-panel-inner">
+        <div class="brain-header">
+          <h2>Cerveau IA</h2>
+        </div>
+
+        <!-- SVG Brain visualization -->
+        <div class="brain-visual" id="brainVisual">
+          <div id="brain3DContainer"></div>
+        </div>
+
+        <!-- Thought stream (tokens being generated) -->
+        <div class="thought-stream" id="thoughtStream">
+          <div class="thought-stream-header">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" width="14" height="14">
+              <path d="M8 1L10 6H15L11 9.5L12.5 15L8 12L3.5 15L5 9.5L1 6H6L8 1Z"/>
+            </svg>
+            Flux de pensées
+          </div>
+          <div class="thought-tokens" id="thoughtTokens">
+            <span class="thought-placeholder">En attente...</span>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="brain-stats">
+          <div class="stat-item">
+            <span class="stat-label">Messages</span>
+            <span class="stat-value" id="statMessages">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Tokens</span>
+            <span class="stat-value" id="statTokens">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Temp.</span>
+            <span class="stat-value" id="statTemp">0.7</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CHAT PANEL (RIGHT) ── -->
+    <section class="chat-panel">
+
+      <!-- Welcome screen -->
+      <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-logo">
+          <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="45" cy="45" r="42" stroke="url(#wg)" stroke-width="1.5" opacity="0.4"/>
+            <path d="M28 45 Q45 22 62 45 Q45 68 28 45Z" fill="url(#wg)"/>
+            <circle cx="45" cy="45" r="7" fill="white"/>
+            <defs><linearGradient id="wg" x1="0" y1="0" x2="90" y2="90">
+              <stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#38bdf8"/>
+            </linearGradient></defs>
+          </svg>
+        </div>
+        <h1>Bonjour, je suis <span class="grad">NovaMind</span></h1>
+        <p>Votre IA locale. Posez-moi une question ou choisissez une suggestion.</p>
+        <div class="sugg-grid">
+          <button class="sugg-card" data-prompt="Explique-moi comment fonctionne un réseau de neurones.">
+            <span class="sugg-emoji">🧠</span><span>Réseaux de neurones</span>
+          </button>
+          <button class="sugg-card" data-prompt="Écris-moi un script Python pour trier une liste de façon optimale.">
+            <span class="sugg-emoji">💻</span><span>Script Python</span>
+          </button>
+          <button class="sugg-card" data-prompt="Donne-moi 5 idées de projets IA que je peux faire chez moi.">
+            <span class="sugg-emoji">💡</span><span>Idées projets IA</span>
+          </button>
+          <button class="sugg-card" data-prompt="Comment améliorer un modèle de machine learning ?">
+            <span class="sugg-emoji">📈</span><span>Machine Learning</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="messages-area" id="messagesArea" style="display:none;">
+        <div class="voice-status" id="voiceStatus">
+          <div class="voice-waves" id="voiceWaves">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <span id="voiceStatusText">Nova est à l'écoute...</span>
+        </div>
+        <div class="messages-list" id="messagesList"></div>
+      </div>
+
+      <!-- Input -->
+      <div class="input-dock">
+        <div class="input-box" id="inputBox">
+          <textarea id="msgInput" placeholder="Écrivez à NovaMind… (Entrée pour envoyer)" rows="1" maxlength="4000"></textarea>
+          <div class="input-actions">
+            <span class="char-cnt" id="charCnt">0/4000</span>
+            <button class="icon-btn" id="compBtn" title="Mode Compagnon (Vocal)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </button>
+            <button class="send-btn" id="sendBtn" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <p class="input-note">NovaMind peut faire des erreurs — vérifiez les informations importantes.</p>
+      </div>
+    </section>
+
+  </div><!-- end .main-content -->
+</div><!-- end .app-shell -->
+
+<!-- ── SETTINGS MODAL ── -->
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h2>⚙️ Paramètres</h2>
+      <button class="icon-btn modal-close-btn" id="closeSettingsBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <label class="field-label">Backend IA</label>
+      <select class="field-ctrl" id="backendSel">
+        <option value="demo">Mode démo (sans backend)</option>
+        <option value="local">Flask local (http://localhost:5000)</option>
+      </select>
+
+      <label class="field-label">URL du serveur Flask</label>
+      <input type="text" class="field-ctrl" id="serverUrlInput" value="http://localhost:5000" placeholder="http://localhost:5000"/>
+
+      <label class="field-label">Nom de l'IA</label>
+      <input type="text" class="field-ctrl" id="aiNameInput" value="NovaMind"/>
+
+      <label class="field-label">Système (personnalité)</label>
+      <textarea class="field-ctrl field-ta" id="sysPromptInput" rows="3">Tu es NovaMind, une IA locale, intelligente et amicale. Réponds toujours en français.</textarea>
+
+      <label class="field-label">Température — <span id="tempDisplay">0.7</span></label>
+      <input type="range" id="tempRange" min="0" max="1" step="0.05" value="0.7" class="range-ctrl"/>
+
+      <div class="field-row" style="margin-top:1rem; display:flex; align-items:center; gap:0.5rem;">
+        <input type="checkbox" id="voiceToggleInput" checked style="width:1.2rem; height:1.2rem; cursor:pointer;" />
+        <label for="voiceToggleInput" style="cursor:pointer; font-size:0.9rem;">Activer la lecture vocale des réponses</label>
+      </div>
+
+      <button class="save-btn" id="saveSettingsBtn">💾 Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

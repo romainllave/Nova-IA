@@ -1,0 +1,42 @@
+{
+  "name": "novamind",
+  "version": "1.0.0",
+  "description": "NovaMind IA Personnelle",
+  "main": "electron_main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "author": "NovaMind",
+  "license": "ISC",
+  "build": {
+    "appId": "com.novamind.app",
+    "productName": "NovaMind",
+    "publish": null,
+    "asar": false,
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "electron_main.js",
+      "main.py",
+      "ai_engine.py",
+      "config.py",
+      "index.html",
+      "style.css",
+      "app.js",
+      "manifest.json",
+      "sw.js",
+      "icon-192.png",
+      "icon-512.png"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^40.8.0",
+    "electron-builder": "^26.8.1"
+  }
+}
