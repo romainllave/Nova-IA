@@ -146,6 +146,17 @@ def set_model():
     return jsonify({'success': True, 'model': model})
 
 
+@app.route('/update_status', methods=['GET'])
+def update_status():
+    """Retourne l'état de la mise à jour Git effectuée au lancement."""
+    status = updater.get_update_status()
+    return jsonify({
+        'updated': status['updated'],
+        'error': status['error'],
+        'version': config.VERSION
+    })
+
+
 # ══════════════════════════════════════════════════════
 # DÉMARRAGE
 # ══════════════════════════════════════════════════════

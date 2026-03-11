@@ -21,8 +21,17 @@
 <div class="bg-canvas">
   <div class="bg-orb orb-a"></div>
   <div class="bg-orb orb-b"></div>
-  <div class="bg-orb orb-c"></div>
-  <canvas id="particleCanvas"></canvas>
+  <div id="particleCanvasContainer"><canvas id="particleCanvas"></canvas></div>
+
+  <!-- BANNÈRE DE MISE À JOUR (Cachée par défaut) -->
+  <div id="updateBanner" class="update-banner hidden">
+    <div class="update-icon">✨</div>
+    <div class="update-content">
+      <span class="update-title">NovaMind a été mis à jour !</span>
+      <span class="update-subtitle">Version <span id="updateVersion">...</span> installée avec succès.</span>
+    </div>
+    <button id="closeUpdateBtn" class="update-close">&times;</button>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════

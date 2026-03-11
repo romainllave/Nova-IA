@@ -494,3 +494,63 @@ html,body{height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:
 }
 
 
+
+/* ─── UPDATE BANNER ─── */
+.update-banner {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(16, 24, 60, 0.85);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  border-radius: 12px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 10000;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: slide-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
+}
+.update-banner.hidden {
+  display: none;
+}
+.update-icon {
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, #a78bfa, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.update-content {
+  display: flex;
+  flex-direction: column;
+}
+.update-title {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.update-subtitle {
+  color: #a1a1aa;
+  font-size: 0.8rem;
+}
+.update-close {
+  background: none;
+  border: none;
+  color: #a1a1aa;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+.update-close:hover {
+  color: #fff;
+}
+@keyframes slide-in {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}

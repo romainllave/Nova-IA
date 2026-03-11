@@ -91,6 +91,7 @@ function init() {
   initParticles();
   if (convs.length > 0) loadConv(convs[0].id);
   updateStats();
+  checkUpdate();
 }
 
 function applyConfig() {
@@ -737,6 +738,45 @@ function updateStats() {
   statMessages.textContent = totalMsgs;
   statTokens.textContent   = totalTokens;
   statTemp.textContent     = CFG.temperature;
+  if ($('statVersion')) $('statVersion').textContent = `v${CFG.version || '1.0.1'}`;
+}
+
+// ─── UPDATE CHECK ───
+async function checkUpdate() {
+  try {
+    const res = await fetch(`${CFG.serverUrl}/update_status`);
+    if (!res.ok) return;
+    const data = await res.json();
+    
+    CFG.version = data.version;
+    updateStats();
+
+    if (data.updated) {
+      const banner = $('updateBanner');
+      const verSpan = $('updateVersion');
+      const closeBtn = $('closeUpdateBtn');
+      
+      if (banner && verSpan) {
+        verSpan.textContent = data.version;
+        banner.classList.remove('hidden');
+        
+        if (closeBtn) {
+          closeBtn.onclick = () => {
+            banner.style.opacity = '0';
+            banner.style.transform = 'translateY(-20px)';
+            setTimeout(() => banner.classList.add('hidden'), 300);
+          };
+        }
+        
+        // Auto-hide after 10 seconds
+        setTimeout(() => {
+          if (!banner.classList.contains('hidden')) closeBtn.click();
+        }, 10000);
+      }
+    }
+  } catch (err) {
+    console.error("Erreur lors de la vérification de mise à jour:", err);
+  }
 }
 
 // ════════════════════════════════════════════
